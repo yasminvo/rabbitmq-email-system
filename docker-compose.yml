@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - email-net
+
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: secret
+      POSTGRES_PASSWORD: secret123
+      POSTGRES_DB: users
+    ports:
+      - "5433:5432"
+    networks:
+      - email-net
+
+  producer:
+    build: ./producer
+    ports:
+      - "5000:5000"
+    depends_on:
+      - rabbitmq
+      - postgres
+    networks:
+      - email-net
+
+  consumer:
+    build: ./consumer
+    depends_on:
+      - rabbitmq
+    networks:
+      - email-net
+
+networks:
+  email-net:
+    driver: bridge
