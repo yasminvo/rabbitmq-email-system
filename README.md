@@ -52,11 +52,10 @@ Consumer rodando em background, escutando a fila.
 ### Exemplos de uso
 
 ```bash
-POST http://localhost:5000/register
-Content-Type: application/json
-{ nome: nome usuario
-  email: email@email.com
-}
+curl -X POST http://localhost:5000/register \
+-H "Content-Type: application/json" \
+-d '{"nome": "nome usuario", "email": "email@email.com"}'
+
 # Exemplo de resposta:
 
 {
